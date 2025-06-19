@@ -1,7 +1,9 @@
+import sys
+
 def add(a, b):
     return a + b
 
-def substract(a, b):
+def subtract(a, b):
     return a - b
 
 def multiply(a, b):
@@ -13,7 +15,7 @@ def divide(a, b):
     else:
         return a / b
     
-def exponentiate(a, b):
+def power(a, b):
     return a ** b 
 
 def modulus(a, b):
@@ -21,28 +23,24 @@ def modulus(a, b):
         print("Cannot divide by 0!")
     return a % b
 
-operations = {
-    '+':add,
-    '-':substract,
-    '/':divide,
-    '*':multiply,
-    '**':exponentiate,
-    '%':modulus
-}
-
-def controls():
-    print("\n-------------------")
-    print("Simple Terminal Calculator on Python")
-    print("\n-------------------")
-    print("Select operation:")
-    print("1. Add")
-    print("2. Substract")
-    print("3. Divide")
-    print("4. Multiply")
-    print("5. a²")
-    print("6. Modulus %")
-    print("9. Exit")
-    print("\n-------------------")
+# Управляющая функция калькулятор. Принимает номер операции и вызывает её из словаря operations
+def controls(num1, num2):
+    print("-------------------")
+    print("Список операций:")
+    print("-------------------")
+    print("1 +\t" + "2 -\t" + "3 /")
+    print("4 *\t" + "5 a^b\t" + "6 %")
+    # print("7 M+\t" + "8 MR\t" + "9 MC")
+    print("-------------------")
+    print("0. Выход")
+    while True:
+        user_input = input("\nВведите номер операции: ")
+        if user_input == '0':
+            sys.exit()
+        elif user_input in operations:
+            return operations[user_input](num1, num2)
+        else:
+            print("\nОшибка ввода!")
 
 
 def get_input():
@@ -51,29 +49,37 @@ def get_input():
     # Ловим исключение try-except блоком и начинаем цикл сначала
     while True:
         try:
-            num1 = float(input("\nEnter first number: "))
+            num1 = float(input("Введите первое число: "))
         except ValueError:
-            print("This is not a number. Please enter a valid one\n")
-            continue
-
-        # Проверяем, что введённая операция (символ) есть в словаре
-        operation = input("\nEnter operation (+, -, /, *, **): ")
-        if operation not in operations:
-            print("\nInvalid operation type! Enter one of the valid ones: +, -, /, *, **")
+            print("Ошибка! Это не число.")
             continue
 
         try:
-            num2 = float(input("\nEnter second number: "))
+            num2 = float(input("Введите второе число: "))
         except ValueError:
-            print("This is not a number. Please enter a valid one\n")
+            print("Ошибка! Это не число.")
             continue
 
-def main():
-    print("Starting simple Python calculator")
+        return num1, num2
 
+operations = {
+    '1':add,
+    '2':subtract,
+    '3':divide,
+    '4':multiply,
+    '5':power,
+    '6':modulus
+}
+
+
+def main():
     while True:
-        if operation in operations:
-            print(f"{num1} {operation} {num2} = {operations[operation](num1, num2)}")
+        # вначале получаем ввод чисел
+        num1, num2 = get_input()
+
+        # затем предоставляем выбор операции
+        print(controls(num1, num2))
+    
 
 
 if __name__ == "__main__":
